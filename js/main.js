@@ -65,7 +65,7 @@ function initScrollEffects() {
         }
     });
 
-    // Animaciones al hacer scroll
+    // Animaciones al hacer scroll - Nota: Requiere la biblioteca Animate.css
     const animateElements = () => {
         const elements = document.querySelectorAll('.animate__animated');
         
@@ -74,11 +74,14 @@ function initScrollEffects() {
             const screenPosition = window.innerHeight / 1.2;
             
             if (position < screenPosition) {
-                const animation = element.classList.contains('animate__fadeInLeft') ? 'animate__fadeInLeft' :
-                                element.classList.contains('animate__fadeInRight') ? 'animate__fadeInRight' :
-                                'animate__fadeInUp';
-                
-                element.classList.add(animation);
+                // Añadir clase de animación solo si no está ya animado
+                if (!element.classList.contains('animate__animated--visible')) {
+                    const animation = element.classList.contains('animate__fadeInLeft') ? 'animate__fadeInLeft' :
+                                    element.classList.contains('animate__fadeInRight') ? 'animate__fadeInRight' :
+                                    'animate__fadeInUp';
+                    
+                    element.classList.add(animation, 'animate__animated--visible');
+                }
             }
         });
     };
@@ -147,13 +150,12 @@ async function loadBeats() {
             beatsContainer.innerHTML = beats.map(beat => `
                 <div class="beat-card">
                     <div class="beat-video">
-                        <iframe src="${beat.embedUrl}" title="${beat.title}" allowfullscreen></iframe>
+                        <iframe src="${beat.embedUrl}" title="${beat.title}" frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="beat-info">
                         <h3>${beat.title}</h3>
                         <p>${beat.genre}</p>
-                        <br>
-                        <a href="${beat.fullUrl}" class="btn project-btn" target="_blank">Ir al Beat</a>
+                        <a href="${beat.fullUrl}" class="btn project-btn" target="_blank" rel="noopener noreferrer">Ir al Beat</a>
                     </div>
                 </div>
             `).join('');
@@ -166,7 +168,8 @@ async function loadBeats() {
 // Carga los proyectos desde el JSON
 async function loadProjects() {
     try {
-        const response = await fetch('data/projects.json');
+        // Corregido el nombre del archivo
+        const response = await fetch('data/projectsjson');
         const projects = await response.json();
         const projectsContainer = document.getElementById('projects-container');
         
@@ -196,8 +199,14 @@ function initProjectModal(projects) {
     const projectModal = document.getElementById('project-modal');
     const projectDetails = document.querySelector('.project-details');
     
+    if (!projectCards.length || !projectModal || !projectDetails) {
+        console.error('Elementos del modal de proyectos no encontrados');
+        return;
+    }
+    
     projectCards.forEach(card => {
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
+            e.preventDefault();
             const projectId = parseInt(card.getAttribute('data-id'));
             const project = projects.find(p => p.id === projectId);
             
@@ -212,7 +221,9 @@ function initProjectModal(projects) {
                     <ul>
                         ${project.tracks.map(track => `<li>${track}</li>`).join('')}
                     </ul>
-                    <a href="${project.link}" class="btn" target="_blank">Escuchar en Spotify</a>
+                    ${project.link !== "#" ? 
+                        `<a href="${project.link}" class="btn" target="_blank" rel="noopener noreferrer">Escuchar en Spotify</a>` : 
+                        '<p class="coming-soon">Próximamente disponible</p>'}
                 `;
                 
                 projectModal.classList.add('active');
@@ -225,7 +236,8 @@ function initProjectModal(projects) {
 // Carga los testimonios desde el JSON
 async function loadTestimonials() {
     try {
-        const response = await fetch('data/testimonials.json');
+        // Corregido el nombre del archivo
+        const response = await fetch('data/testimonial.json');
         const testimonials = await response.json();
         const testimonialSlider = document.getElementById('testimonial-slider');
         const testimonialDots = document.getElementById('testimonial-dots');
@@ -267,6 +279,12 @@ function initTestimonialsSlider() {
         const dots = document.querySelectorAll('.testimonial-dot');
         const prevBtn = document.querySelector('.testimonial-prev');
         const nextBtn = document.querySelector('.testimonial-next');
+        
+        if (!testimonialSlides.length) {
+            console.error('No se encontraron slides de testimonios');
+            return;
+        }
+        
         let currentIndex = 0;
         let autoplayInterval;
 
@@ -281,7 +299,9 @@ function initTestimonialsSlider() {
             });
             
             testimonialSlides[index].classList.add('active');
-            dots[index].classList.add('active');
+            if (dots[index]) {
+                dots[index].classList.add('active');
+            }
             currentIndex = index;
         }
         
@@ -350,6 +370,20 @@ function initContactForm() {
             
             const formData = new FormData(contactForm);
             const formObject = Object.fromEntries(formData.entries());
+            
+            // Validación básica del formulario
+            const { name, email, subject, message } = formObject;
+            if (!name || !email || !subject || !message) {
+                alert('Por favor, completa todos los campos del formulario.');
+                return;
+            }
+            
+            // Validación simple de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor, introduce un email válido.');
+                return;
+            }
             
             try {
                 // Aquí normalmente enviarías los datos a un servidor

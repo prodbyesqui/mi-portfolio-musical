@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Esqui | Productor Musical</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Añadir la biblioteca Animate.css para las animaciones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
@@ -42,9 +44,13 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <video autoplay muted loop>
-            <source src="assets/videos/background.mp4" type="video/mp4">
-        </video>
+        <!-- Añadir un fallback de imagen por si el video no funciona -->
+        <div class="hero-background">
+            <video autoplay muted loop playsinline>
+                <source src="assets/videos/background.mp4" type="video/mp4">
+            </video>
+            <div class="fallback-bg"></div> <!-- Fondo alternativo si el video no carga -->
+        </div>
         <div class="hero-content animate__animated animate__fadeInUp">
             <h1>ESQUI</h1>
             <p>Productor Musical Urbano | Trap | R&B | Reggaetón</p>
@@ -78,6 +84,7 @@
         </div>
         <div class="services-container" id="services-container">
             <!-- Los servicios se cargarán desde services.json -->
+            <div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Cargando servicios...</div>
         </div>
     </section>
 
@@ -88,6 +95,7 @@
         </div>
         <div class="beats-container" id="beats-container">
             <!-- Los beats se cargarán desde beats.json -->
+            <div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Cargando beats...</div>
         </div>
     </section>
 
@@ -98,6 +106,7 @@
         </div>
         <div class="projects-container" id="projects-container">
             <!-- Los proyectos se cargarán desde projects.json -->
+            <div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Cargando proyectos...</div>
         </div>
     </section>
 
@@ -108,14 +117,15 @@
         </div>
         <div class="testimonials-container">
             <div class="testimonial-slider" id="testimonial-slider">
-                <!-- Los testimonios se cargarán desde testimonials.json -->
+                <!-- Los testimonios se cargarán desde testimonial.json -->
+                <div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Cargando testimonios...</div>
             </div>
             <div class="testimonial-nav">
-                <button class="testimonial-prev"><i class="fas fa-chevron-left"></i></button>
+                <button class="testimonial-prev" aria-label="Testimonio anterior"><i class="fas fa-chevron-left"></i></button>
                 <div class="testimonial-dots" id="testimonial-dots">
                     <!-- Los puntos se generarán dinámicamente -->
                 </div>
-                <button class="testimonial-next"><i class="fas fa-chevron-right"></i></button>
+                <button class="testimonial-next" aria-label="Testimonio siguiente"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
@@ -124,8 +134,10 @@
     <section id="dossier" class="dossier-section">
         <h2>Dossier</h2>
         <p>Explora mi dossier para ver referencias, procesos creativos y trayectoria profesional.</p>
-        <a href="#" class="btn" id="view-dossier">Ver Dossier</a>
-        <a href="assets/docs/dossier.pdf" download class="btn">Descargar PDF</a>
+        <div class="dossier-buttons">
+            <a href="#" class="btn" id="view-dossier">Ver Dossier</a>
+            <a href="assets/docs/dossier.pdf" download class="btn">Descargar PDF</a>
+        </div>
     </section>
 
     <!-- Contact Section -->
@@ -140,7 +152,7 @@
                 <div class="contact-methods">
                     <div class="contact-method">
                         <i class="fas fa-envelope"></i>
-                        <a href="mailto:prodbyesqui@gmail.com" style="color: white;">prodbyesqui@gmail.com</a>
+                        <a href="mailto:prodbyesqui@gmail.com">prodbyesqui@gmail.com</a>
                     </div>
                     <div class="contact-method">
                         <i class="fas fa-map-marker-alt"></i>
@@ -148,7 +160,7 @@
                     </div>
                     <div class="contact-method">
                         <i class="fab fa-instagram"></i>
-                        <a href="https://www.instagram.com/hugoeg_04" style="color: white;">@hugoeg_04</a>
+                        <a href="https://www.instagram.com/hugoeg_04" target="_blank" rel="noopener noreferrer">@hugoeg_04</a>
                     </div>
                 </div>
             </div>
@@ -178,20 +190,20 @@
     <footer>
         <div class="footer-content">
             <div class="social-links">
-                <a href="https://www.instagram.com/hugoeg_04/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.tiktok.com/@hugoeg_04" target="_blank"><i class="fab fa-tiktok"></i></a>
-                <a href="https://www.youtube.com/@prodbyesqui" target="_blank"><i class="fab fa-youtube"></i></a>
-                <a href="https://www.linkedin.com/in/hugo-esquilas-garrote-9ab07a359/" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="https://www.threads.com/@hugoeg_04" target="_blank"><i class="fab fa-threads"></i></a>
+                <a href="https://www.instagram.com/hugoeg_04/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@hugoeg_04" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.youtube.com/@prodbyesqui" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.linkedin.com/in/hugo-esquilas-garrote-9ab07a359/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.threads.com/@hugoeg_04" target="_blank" rel="noopener noreferrer" aria-label="Threads"><i class="fab fa-threads"></i></a>
             </div>
             <p class="copyright">&copy; <span id="year"></span> Esqui. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <!-- Project Modal -->
-    <div class="modal" id="project-modal">
-        <div class="modal-content">
-            <button class="close-modal"><i class="fas fa-times"></i></button>
+    <div class="modal" id="project-modal" aria-hidden="true" tabindex="-1" role="dialog">
+        <div class="modal-content" role="document">
+            <button class="close-modal" aria-label="Cerrar"><i class="fas fa-times"></i></button>
             <div class="project-details">
                 <!-- Contenido dinámico de proyectos -->
             </div>
@@ -199,11 +211,11 @@
     </div>
 
     <!-- Dossier Modal -->
-    <div class="modal" id="dossier-modal">
-        <div class="modal-content">
-            <button class="close-modal"><i class="fas fa-times"></i></button>
+    <div class="modal" id="dossier-modal" aria-hidden="true" tabindex="-1" role="dialog">
+        <div class="modal-content" role="document">
+            <button class="close-modal" aria-label="Cerrar"><i class="fas fa-times"></i></button>
             <h2>Mi Dossier</h2>
-            <iframe src="assets/docs/dossier.pdf" class="pdf-viewer"></iframe>
+            <iframe src="assets/docs/dossier.pdf" class="pdf-viewer" title="Dossier PDF"></iframe>
         </div>
     </div>
 

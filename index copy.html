@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
 </head>
 <body>
     <!-- Loader -->
@@ -76,8 +77,35 @@
         <div class="section-title">
             <h2>Servicios</h2>
         </div>
-        <div class="services-container" id="services-container">
-            <!-- Los servicios se cargarán desde services.json -->
+        <div class="services-container">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-music"></i>
+                </div>
+                <h3>Beats Exclusivos</h3>
+                <p>Diseño de beats personalizados, hechos a medida para tu flow, género y visión artística.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h3>Grabación & Mezcla</h3>
+                <p>Captura y mezcla de voces con calidad profesional, listas para competir al más alto nivel.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-compact-disc"></i>
+                </div>
+                <h3>Mastering</h3>
+                <p>Domina tu track con un sonido potente, equilibrado y preparado para cualquier plataforma.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h3>Música para Medios</h3>
+                <p>Composición para anuncios, documentales, videojuegos y contenido visual con alma urbana.</p>
+            </div>
         </div>
     </section>
 
@@ -86,39 +114,86 @@
         <div class="section-title">
             <h2>Beats Destacados</h2>
         </div>
-        <div class="beats-container" id="beats-container">
-            <!-- Los beats se cargarán desde beats.json -->
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="section-title">
-            <h2>Proyectos</h2>
-        </div>
-        <div class="projects-container" id="projects-container">
-            <!-- Los proyectos se cargarán desde projects.json -->
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials">
-        <div class="section-title">
-            <h2>Testimonios</h2>
-        </div>
-        <div class="testimonials-container">
-            <div class="testimonial-slider" id="testimonial-slider">
-                <!-- Los testimonios se cargarán desde testimonials.json -->
-            </div>
-            <div class="testimonial-nav">
-                <button class="testimonial-prev"><i class="fas fa-chevron-left"></i></button>
-                <div class="testimonial-dots" id="testimonial-dots">
-                    <!-- Los puntos se generarán dinámicamente -->
+        <div class="beats-container">
+            <div class="beat-card">
+                <div class="beat-video">
+                    <iframe src="https://www.youtube.com/embed/tq6Rm_ZVwVQ?si=a5T0P6aCs2M9wwvX" title="Beat 1" allowfullscreen></iframe>
                 </div>
-                <button class="testimonial-next"><i class="fas fa-chevron-right"></i></button>
+                <div class="beat-info">
+                    <h3>Yung Beef x Duki x Chill-E Type Beat</h3>
+                    <p>Heavy Trap</p>
+                    <br>
+                    <a href="https://www.youtube.com/watch?v=tq6Rm_ZVwVQ" class="btn project-btn">Ir al Beat</a>
+
+                </div>
+            </div>
+            <div class="beat-card">
+                <div class="beat-video">
+                    <iframe src="https://www.youtube.com/embed/wt5eQQbDLas?si=o3O7hO_r1FZLADOU" title="Beat 2" allowfullscreen></iframe>
+                </div>
+                <div class="beat-info">
+                    <h3>Feelings — Leiti x Cruz Cafuné Type Beat</h3>
+                    <p>R&B / Trap</p>
+                    <br>
+                    <a href="https://www.youtube.com/watch?v=wt5eQQbDLas" class="btn project-btn">Ir al Beat</a>
+
+                </div>
+            </div>
+            <div class="beat-card">
+                <div class="beat-video">
+                    <iframe src="https://www.youtube.com/embed/uAQQrx9B_7U?si=tTntxlasZO1Evvjj"  title="Beat 3" allowfullscreen></iframe>
+                </div>
+                <div class="beat-info">
+                    <h3>Primavera — Autumn! x Cafuné Type Beat</h3>
+                    <p>Soulful Pluggnb</p>
+                    <br>
+                    <a href="https://www.youtube.com/watch?v=uAQQrx9B_7U" class="btn project-btn">Ir al Beat</a>
+
+                </div>
             </div>
         </div>
     </section>
+
+   <!-- Projects Section -->
+<section id="projects">
+    <div class="section-title">
+        <h2>Proyectos</h2>
+    </div>
+    <div class="projects-container">
+        <div class="project-card" data-id="1">
+            <img src="assets/images/narcisista.jpg" alt="Narcisista - Yazwick" class="project-img">
+            <div class="project-overlay">
+                <h3>Mixtape "Narcisista"</h3>
+                <p>Producción integral para Yazwick</p>
+                <a href="https://open.spotify.com/intl-es/album/7fHdrIvi85SxWnI4iLP6JA?si=jyNjcOu5TNGGxGAWs2hadA" class="btn project-btn">Ver detalles</a>
+            </div>
+        </div>
+        <div class="project-card" data-id="2">
+            <img src="assets/images/project2.jpg" alt="Collab Sessions" class="project-img">
+            <div class="project-overlay">
+                <h3>Collab Sessions Vol. 1</h3>
+                <p>Producción y mezcla para artistas emergentes</p>
+                <a href="#" class="btn project-btn">Ver detalles</a>
+            </div>
+        </div>
+        <div class="project-card" data-id="3">
+            <img src="assets/images/project3.jpg" alt="Music for Media" class="project-img">
+            <div class="project-overlay">
+                <h3>Música para Marcas</h3>
+                <p>Producción para campañas publicitarias</p>
+                <a href="#" class="btn project-btn">Ver detalles</a>
+            </div>
+        </div>
+        <div class="project-card" data-id="4">
+            <img src="assets/images/project4.jpg" alt="Upcoming Release" class="project-img">
+            <div class="project-overlay">
+                <h3>Próximos Lanzamientos</h3>
+                <p>Proyectos en desarrollo</p>
+                <a href="#" class="btn project-btn">Ver detalles</a>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- Dossier Section -->
     <section id="dossier" class="dossier-section">
@@ -128,51 +203,117 @@
         <a href="assets/docs/dossier.pdf" download class="btn">Descargar PDF</a>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="section-title">
-            <h2>Contacto</h2>
+    <!-- Add this section before the footer in your HTML -->
+<section id="contact">
+    <div class="section-title">
+        <h2>Contacto</h2>
+    </div>
+    <div class="contact-container">
+        <div class="contact-info">
+            <h3>¿Listo para crear algo increíble?</h3>
+            <p>Cuéntame sobre tu proyecto y veamos cómo podemos trabajar juntos para llevarlo al siguiente nivel.</p>
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:prodbyesqui@gmail.com" style="color: white;">prodbyesqui@gmail.com</a>
+                </div>
+                <div class="contact-method">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Madrid, España</p>
+                </div>
+                <div class="contact-method">
+                    <i class="fab fa-instagram"></i>
+                    <a href="https://www.instagram.com/hugoeg_04" style="color: white;">@hugoeg_04</a>
+                </div>
+            </div>
         </div>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>¿Listo para crear algo increíble?</h3>
-                <p>Cuéntame sobre tu proyecto y veamos cómo podemos trabajar juntos para llevarlo al siguiente nivel.</p>
-                <div class="contact-methods">
-                    <div class="contact-method">
-                        <i class="fas fa-envelope"></i>
-                        <a href="mailto:prodbyesqui@gmail.com" style="color: white;">prodbyesqui@gmail.com</a>
+        <form id="contact-form" class="contact-form">
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">Asunto</label>
+                <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Mensaje</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn">Enviar Mensaje</button>
+        </form>
+    </div>
+</section>
+
+<!-- Add this section before the dossier section -->
+<section id="testimonials">
+    <div class="section-title">
+        <h2>Testimonios</h2>
+    </div>
+    <div class="testimonials-container">
+        <div class="testimonial-slider">
+            <div class="testimonial-slide active">
+                <div class="testimonial-content">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
                     </div>
-                    <div class="contact-method">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <p>Madrid, España</p>
-                    </div>
-                    <div class="contact-method">
-                        <i class="fab fa-instagram"></i>
-                        <a href="https://www.instagram.com/hugoeg_04" style="color: white;">@hugoeg_04</a>
+                    <p class="testimonial-text">Trabajar con Esqui fue un punto de inflexión en mi carrera. Los beats son únicos y el proceso de grabación fue increíblemente profesional. Definitivamente seguiremos creando juntos.</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/testimonial-1.jpg" alt="Yazwick" class="author-img">
+                        <div class="author-info">
+                            <h4>Yazwick</h4>
+                            <p>Artista</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <form id="contact-form" class="contact-form">
-                <div class="form-group">
-                    <label for="name">Nombre</label>
-                    <input type="text" id="name" name="name" required>
+            <div class="testimonial-slide">
+                <div class="testimonial-content">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="testimonial-text">Esqui logró capturar exactamente el sonido que buscaba para mi proyecto. Su atención al detalle y dedicación fueron fundamentales para obtener un resultado tan profesional.</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/testimonial-2.jpg" alt="Juicy BAE" class="author-img">
+                        <div class="author-info">
+                            <h4>Juicy BAE</h4>
+                            <p>Artista</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+            </div>
+            <div class="testimonial-slide">
+                <div class="testimonial-content">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="testimonial-text">Los beats de Esqui tienen esa combinación perfecta entre originalidad y comercialidad. Cada producción tiene su esencia única que hace que destaque entre el resto.</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/testimonial-3.jpg" alt="Blueboy" class="author-img">
+                        <div class="author-info">
+                            <h4>Blueboy</h4>
+                            <p>Productor & DJ</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="subject">Asunto</label>
-                    <input type="text" id="subject" name="subject" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Mensaje</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn">Enviar Mensaje</button>
-            </form>
+            </div>
         </div>
-    </section>
+        <div class="testimonial-nav">
+            <button class="testimonial-prev"><i class="fas fa-chevron-left"></i></button>
+            <div class="testimonial-dots">
+                <span class="testimonial-dot active" data-index="0"></span>
+                <span class="testimonial-dot" data-index="1"></span>
+                <span class="testimonial-dot" data-index="2"></span>
+            </div>
+            <button class="testimonial-next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</section>
+
 
     <!-- Footer -->
     <footer>
@@ -193,7 +334,7 @@
         <div class="modal-content">
             <button class="close-modal"><i class="fas fa-times"></i></button>
             <div class="project-details">
-                <!-- Contenido dinámico de proyectos -->
+                <!-- Contenido dinámico -->
             </div>
         </div>
     </div>
