@@ -1,0 +1,26 @@
+[
+    {
+      "id": 1,
+      "title": "Beats Exclusivos",
+      "description": "Diseño de beats personalizados, hechos a medida para tu flow, género y visión artística.",
+      "icon": "fas fa-music"
+    },
+    {
+      "id": 2,
+      "title": "Grabación & Mezcla",
+      "description": "Captura y mezcla de voces con calidad profesional, listas para competir al más alto nivel.",
+      "icon": "fas fa-microphone"
+    },
+    {
+      "id": 3,
+      "title": "Mastering",
+      "description": "Domina tu track con un sonido potente, equilibrado y preparado para cualquier plataforma.",
+      "icon": "fas fa-compact-disc"
+    },
+    {
+      "id": 4,
+      "title": "Música para Medios",
+      "description": "Composición para anuncios, documentales, videojuegos y contenido visual con alma urbana.",
+      "icon": "fas fa-film"
+    }
+  ]

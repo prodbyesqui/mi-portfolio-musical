@@ -1,0 +1,23 @@
+[
+    {
+      "id": 1,
+      "text": "Trabajar con Esqui fue un punto de inflexión en mi carrera. Los beats son únicos y el proceso de grabación fue increíblemente profesional. Definitivamente seguiremos creando juntos.",
+      "author": "Yazwick",
+      "role": "Artista",
+      "image": "assets/images/testimonial-1.jpg"
+    },
+    {
+      "id": 2,
+      "text": "Esqui logró capturar exactamente el sonido que buscaba para mi proyecto. Su atención al detalle y dedicación fueron fundamentales para obtener un resultado tan profesional.",
+      "author": "Juicy BAE",
+      "role": "Artista",
+      "image": "assets/images/testimonial-2.jpg"
+    },
+    {
+      "id": 3,
+      "text": "Los beats de Esqui tienen esa combinación perfecta entre originalidad y comercialidad. Cada producción tiene su esencia única que hace que destaque entre el resto.",
+      "author": "Blueboy",
+      "role": "Productor & DJ",
+      "image": "assets/images/testimonial-3.jpg"
+    }
+  ]

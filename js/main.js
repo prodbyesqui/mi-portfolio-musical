@@ -1,445 +1,433 @@
-// Espera a que toda la página (incluyendo imágenes, hojas de estilo, etc.) esté completamente cargada
-window.addEventListener("load", () => {
-    const loader = document.querySelector(".loader");
-  
-    if (loader) {
-      // Añade la clase que inicia la transición de salida
-      loader.classList.add("hidden");
-  
-      // Espera que la transición termine y elimina el loader del DOM
-      setTimeout(() => {
-        loader.remove();
-      }, 500); // Debe coincidir con el tiempo de transición en .hidden (500ms)
-    }
+// Espera a que el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    // Inicializa todas las funcionalidades
+    initLoader();
+    updateCopyrightYear();
+    initMobileMenu();
+    initScrollEffects();
+    initScrollSpy();
+    loadServices();
+    loadBeats();
+    loadProjects();
+    loadTestimonials();
+    initContactForm();
+    initModals();
+    initTestimonialsSlider();
 });
 
+// Función para manejar el loader
+function initLoader() {
+    window.addEventListener("load", () => {
+        const loader = document.querySelector(".loader");
+      
+        if (loader) {
+            loader.classList.add("hidden");
+            setTimeout(() => {
+                loader.remove();
+            }, 500);
+        }
+    });
+}
+
 // Actualiza el año en el copyright
-document.getElementById("year").textContent = new Date().getFullYear();
+function updateCopyrightYear() {
+    document.getElementById("year").textContent = new Date().getFullYear();
+}
 
-// Navegación móvil
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
+// Inicializa el menú para móviles
+function initMobileMenu() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
 
-if (menuToggle && navLinks) {
-    menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    }
+}
+
+// Inicializa los efectos de scroll
+function initScrollEffects() {
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (header) {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
     });
 
-    // Cierra el menú cuando se hace clic en un enlace
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
+    // Animaciones al hacer scroll
+    const animateElements = () => {
+        const elements = document.querySelectorAll('.animate__animated');
+        
+        elements.forEach(element => {
+            const position = element.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.2;
+            
+            if (position < screenPosition) {
+                const animation = element.classList.contains('animate__fadeInLeft') ? 'animate__fadeInLeft' :
+                                element.classList.contains('animate__fadeInRight') ? 'animate__fadeInRight' :
+                                'animate__fadeInUp';
+                
+                element.classList.add(animation);
+            }
+        });
+    };
+
+    window.addEventListener('load', animateElements);
+    window.addEventListener('scroll', animateElements);
+}
+
+// Inicializa el scroll spy para la navegación
+function initScrollSpy() {
+    const sections = document.querySelectorAll('section');
+    const navItems = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            
+            if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                current = section.getAttribute('id');
+            }
+        });
+        
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('href').substring(1) === current) {
+                item.classList.add('active');
+            }
         });
     });
 }
 
-// Cambio de estilo de la barra de navegación al hacer scroll
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    if (header) {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    }
-});
-
-// Marcar enlace activo según la sección visible
-const sections = document.querySelectorAll('section');
-const navItems = document.querySelectorAll('.nav-link');
-
-window.addEventListener('scroll', () => {
-    let current = '';
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
+// Carga los servicios desde el JSON
+async function loadServices() {
+    try {
+        const response = await fetch('data/services.json');
+        const services = await response.json();
+        const servicesContainer = document.getElementById('services-container');
         
-        if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
-            current = section.getAttribute('id');
+        if (servicesContainer) {
+            servicesContainer.innerHTML = services.map(service => `
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="${service.icon}"></i>
+                    </div>
+                    <h3>${service.title}</h3>
+                    <p>${service.description}</p>
+                </div>
+            `).join('');
         }
-    });
-    
-    navItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('href').substring(1) === current) {
-            item.classList.add('active');
-        }
-    });
-});
-
-// Modal de proyectos
-const projectCards = document.querySelectorAll('.project-card');
-const projectModal = document.getElementById('project-modal');
-const projectDetails = document.querySelector('.project-details');
-const closeProjectModal = projectModal.querySelector('.close-modal');
-
-// Datos de proyectos (esto podría venir de una API o base de datos en un sitio real)
-const projectsData = [
-    {
-        id: 1,
-        title: "Mixtape 'Narcisista'",
-        artist: "Yazwick",
-        description: "Producción completa para la mixtape 'Narcisista' de Yazwick. Incluye la producción de beats, grabación de voces, mezcla y masterización. Un proyecto que fusiona trap con elementos melódicos de R&B para crear un sonido único y personal.",
-        image: "assets/images/narcisista.jpg",
-        link: "https://open.spotify.com/intl-es/album/7fHdrIvi85SxWnI4iLP6JA?si=jyNjcOu5TNGGxGAWs2hadA",
-        year: "2023",
-        tracks: ["Intro", "Narcisista", "No Te Creo", "Perdona (feat. Juicy BAE)", "Otro Nivel"]
-    },
-    {
-        id: 2,
-        title: "Collab Sessions Vol. 1",
-        artist: "Varios Artistas",
-        description: "Serie de sesiones colaborativas con artistas emergentes de la escena urbana española. Este volumen incluye colaboraciones con 5 artistas diferentes, cada uno aportando su estilo único a beats producidos específicamente para ellos.",
-        image: "assets/images/project2.jpg",
-        link: "#",
-        year: "2024",
-        tracks: ["Flow Nocturno - Blueboy", "Amanecer - Juicy BAE", "Sin Miedo - KVLB", "En Mi Zona - YNG Drip", "Destino - Lil Rose"]
-    },
-    {
-        id: 3,
-        title: "Música para Marcas",
-        artist: "Producciones Comerciales",
-        description: "Trabajos realizados para marcas y agencias de publicidad que buscaban un sonido urbano contemporáneo para sus campañas. Estas producciones han sido utilizadas en plataformas digitales y televisión.",
-        image: "assets/images/project3.jpg",
-        link: "#",
-        year: "2023-2024",
-        tracks: ["Campaña Primavera - SportBrand", "Lanzamiento App - TechCo", "Spot Verano - Refrescos XYZ", "Redes Sociales - Moda Urbana"]
-    },
-    {
-        id: 4,
-        title: "Próximos Lanzamientos",
-        artist: "En Desarrollo",
-        description: "Proyectos actualmente en producción que serán lanzados próximamente. Incluye colaboraciones con artistas establecidos y nuevos talentos, así como experimentación con nuevos sonidos y técnicas de producción.",
-        image: "assets/images/project4.jpg",
-        link: "#",
-        year: "2024-2025",
-        tracks: ["EP Colaborativo (Otoño 2024)", "Pack de Beats Vol.2 (Verano 2024)", "Album producción completa (Invierno 2024-2025)"]
+    } catch (error) {
+        console.error('Error al cargar los servicios:', error);
     }
-];
+}
 
-// Abrir modal de proyecto
-projectCards.forEach(card => {
-    card.addEventListener('click', () => {
-        const projectId = card.getAttribute('data-id');
-        const project = projectsData.find(p => p.id === parseInt(projectId));
+// Carga los beats desde el JSON
+async function loadBeats() {
+    try {
+        const response = await fetch('data/beats.json');
+        const beats = await response.json();
+        const beatsContainer = document.getElementById('beats-container');
         
-        if (project) {
-            projectDetails.innerHTML = `
-                <h2>${project.title}</h2>
-                <p><strong>Artista:</strong> ${project.artist}</p>
-                <p><strong>Año:</strong> ${project.year}</p>
-                <img src="${project.image}" alt="${project.title}">
-                <p>${project.description}</p>
-                <h3>Tracks:</h3>
-                <ul>
-                    ${project.tracks.map(track => `<li>${track}</li>`).join('')}
-                </ul>
-                <a href="${project.link}" class="btn" target="_blank">Escuchar en Spotify</a>
-            `;
+        if (beatsContainer) {
+            beatsContainer.innerHTML = beats.map(beat => `
+                <div class="beat-card">
+                    <div class="beat-video">
+                        <iframe src="${beat.embedUrl}" title="${beat.title}" allowfullscreen></iframe>
+                    </div>
+                    <div class="beat-info">
+                        <h3>${beat.title}</h3>
+                        <p>${beat.genre}</p>
+                        <br>
+                        <a href="${beat.fullUrl}" class="btn project-btn" target="_blank">Ir al Beat</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error al cargar los beats:', error);
+    }
+}
+
+// Carga los proyectos desde el JSON
+async function loadProjects() {
+    try {
+        const response = await fetch('data/projects.json');
+        const projects = await response.json();
+        const projectsContainer = document.getElementById('projects-container');
+        
+        if (projectsContainer) {
+            projectsContainer.innerHTML = projects.map(project => `
+                <div class="project-card" data-id="${project.id}">
+                    <img src="${project.image}" alt="${project.title} - ${project.artist}" class="project-img">
+                    <div class="project-overlay">
+                        <h3>${project.title}</h3>
+                        <p>${project.artist}</p>
+                        <a href="#" class="btn project-btn">Ver detalles</a>
+                    </div>
+                </div>
+            `).join('');
             
-            projectModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            // Añadir los event listeners después de crear los elementos
+            initProjectModal(projects);
         }
-    });
-});
-
-// Cerrar modal de proyecto
-closeProjectModal.addEventListener('click', () => {
-    projectModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-});
-
-// Modal de dossier
-const viewDossierBtn = document.getElementById('view-dossier');
-const dossierModal = document.getElementById('dossier-modal');
-const closeDossierModal = dossierModal.querySelector('.close-modal');
-
-// Abrir modal de dossier
-viewDossierBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    dossierModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-});
-
-// Cerrar modal de dossier
-closeDossierModal.addEventListener('click', () => {
-    dossierModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-});
-
-// Cerrar modales al hacer clic fuera del contenido
-window.addEventListener('click', (e) => {
-    if (e.target === projectModal) {
-        projectModal.classList.remove('active');
-        document.body.style.overflow = 'auto';
+    } catch (error) {
+        console.error('Error al cargar los proyectos:', error);
     }
-    if (e.target === dossierModal) {
-        dossierModal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    }
-});
+}
 
-// Animaciones al hacer scroll
-const animateElements = () => {
-    const elements = document.querySelectorAll('.animate__animated');
+// Inicializa el modal de proyectos
+function initProjectModal(projects) {
+    const projectCards = document.querySelectorAll('.project-card');
+    const projectModal = document.getElementById('project-modal');
+    const projectDetails = document.querySelector('.project-details');
     
-    elements.forEach(element => {
-        const position = element.getBoundingClientRect().top;
-        const screenPosition = window.innerHeight / 1.2;
-        
-        if (position < screenPosition) {
-            const animation = element.classList.contains('animate__fadeInLeft') ? 'animate__fadeInLeft' :
-                             element.classList.contains('animate__fadeInRight') ? 'animate__fadeInRight' :
-                             'animate__fadeInUp';
+    projectCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const projectId = parseInt(card.getAttribute('data-id'));
+            const project = projects.find(p => p.id === projectId);
             
-            element.classList.add(animation);
-        }
+            if (project) {
+                projectDetails.innerHTML = `
+                    <h2>${project.title}</h2>
+                    <p><strong>Artista:</strong> ${project.artist}</p>
+                    <p><strong>Año:</strong> ${project.year}</p>
+                    <img src="${project.image}" alt="${project.title}">
+                    <p>${project.description}</p>
+                    <h3>Tracks:</h3>
+                    <ul>
+                        ${project.tracks.map(track => `<li>${track}</li>`).join('')}
+                    </ul>
+                    <a href="${project.link}" class="btn" target="_blank">Escuchar en Spotify</a>
+                `;
+                
+                projectModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
     });
-};
+}
 
-// Ejecutar animaciones al cargar y al hacer scroll
-window.addEventListener('load', animateElements);
-window.addEventListener('scroll', animateElements);
-// Mejorar el formulario de contacto
-document.addEventListener('DOMContentLoaded', function() {
+// Carga los testimonios desde el JSON
+async function loadTestimonials() {
+    try {
+        const response = await fetch('data/testimonials.json');
+        const testimonials = await response.json();
+        const testimonialSlider = document.getElementById('testimonial-slider');
+        const testimonialDots = document.getElementById('testimonial-dots');
+        
+        if (testimonialSlider && testimonialDots) {
+            // Crear slides
+            testimonialSlider.innerHTML = testimonials.map((testimonial, index) => `
+                <div class="testimonial-slide ${index === 0 ? 'active' : ''}">
+                    <div class="testimonial-content">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p class="testimonial-text">${testimonial.text}</p>
+                        <div class="testimonial-author">
+                            <img src="${testimonial.image}" alt="${testimonial.author}" class="author-img">
+                            <div class="author-info">
+                                <h4>${testimonial.author}</h4>
+                                <p>${testimonial.role}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Crear dots
+            testimonialDots.innerHTML = testimonials.map((_, index) => `
+                <span class="testimonial-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></span>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error al cargar los testimonios:', error);
+    }
+}
+
+// Inicializa el slider de testimonios
+function initTestimonialsSlider() {
+    setTimeout(() => {
+        const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.testimonial-dot');
+        const prevBtn = document.querySelector('.testimonial-prev');
+        const nextBtn = document.querySelector('.testimonial-next');
+        let currentIndex = 0;
+        let autoplayInterval;
+
+        // Función para mostrar un testimonio específico
+        function showTestimonial(index) {
+            testimonialSlides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            dots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            testimonialSlides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentIndex = index;
+        }
+        
+        // Event listeners para los botones de navegación
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                let newIndex = currentIndex - 1;
+                if (newIndex < 0) {
+                    newIndex = testimonialSlides.length - 1;
+                }
+                showTestimonial(newIndex);
+                resetAutoplay();
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                let newIndex = currentIndex + 1;
+                if (newIndex >= testimonialSlides.length) {
+                    newIndex = 0;
+                }
+                showTestimonial(newIndex);
+                resetAutoplay();
+            });
+        }
+        
+        // Event listeners para los dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showTestimonial(index);
+                resetAutoplay();
+            });
+        });
+
+        // Autoplay del slider
+        function startAutoplay() {
+            autoplayInterval = setInterval(() => {
+                let newIndex = currentIndex + 1;
+                if (newIndex >= testimonialSlides.length) {
+                    newIndex = 0;
+                }
+                showTestimonial(newIndex);
+            }, 5000); // Cambia cada 5 segundos
+        }
+
+        // Resetea el autoplay
+        function resetAutoplay() {
+            clearInterval(autoplayInterval);
+            startAutoplay();
+        }
+
+        // Inicia el autoplay
+        if (testimonialSlides.length > 1) {
+            startAutoplay();
+        }
+    }, 500); // Pequeño retraso para asegurar que los testimonios ya se han cargado
+}
+
+// Inicializa el formulario de contacto
+function initContactForm() {
     const contactForm = document.getElementById('contact-form');
     
     if (contactForm) {
-        // Añadir validación de entrada
-        const inputs = contactForm.querySelectorAll('input, textarea');
-        
-        inputs.forEach(input => {
-            // Validación en tiempo real
-            input.addEventListener('input', function() {
-                validateInput(this);
-            });
-            
-            // Validación al perder el foco
-            input.addEventListener('blur', function() {
-                validateInput(this);
-            });
-        });
-        
-        // Validar un campo específico
-        function validateInput(input) {
-            const errorClass = 'input-error';
-            const parent = input.parentElement;
-            const errorElement = parent.querySelector('.error-message') || document.createElement('div');
-            
-            if (!errorElement.classList.contains('error-message')) {
-                errorElement.classList.add('error-message');
-                parent.appendChild(errorElement);
-            }
-            
-            // Reset error
-            input.classList.remove(errorClass);
-            errorElement.textContent = '';
-            
-            // Validar según el tipo
-            if (input.hasAttribute('required') && !input.value.trim()) {
-                input.classList.add(errorClass);
-                errorElement.textContent = 'Este campo es obligatorio';
-                return false;
-            }
-            
-            if (input.type === 'email' && input.value) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(input.value)) {
-                    input.classList.add(errorClass);
-                    errorElement.textContent = 'Por favor, introduce un email válido';
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-        
-        // Validar todo el formulario
-        function validateForm() {
-            let isValid = true;
-            inputs.forEach(input => {
-                if (!validateInput(input)) {
-                    isValid = false;
-                }
-            });
-            return isValid;
-        }
-        
-        // Manejar envío del formulario
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            if (!validateForm()) {
-                return false;
+            const formData = new FormData(contactForm);
+            const formObject = Object.fromEntries(formData.entries());
+            
+            try {
+                // Aquí normalmente enviarías los datos a un servidor
+                // Por ahora, solo simularemos una respuesta exitosa
+                console.log('Datos del formulario:', formObject);
+                
+                // Simular envío exitoso
+                alert('¡Mensaje enviado con éxito! Te contactaré pronto.');
+                contactForm.reset();
+                
+                // En un caso real, aquí harías una petición fetch a tu endpoint
+                // const response = await fetch('tu-endpoint', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify(formObject),
+                // });
+                // const data = await response.json();
+                // ... manejo de la respuesta
+                
+            } catch (error) {
+                console.error('Error al enviar el formulario:', error);
+                alert('Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.');
             }
-            
-            // Efecto de carga
-            const submitBtn = contactForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-            
-            // Get form data
-            const formData = new FormData(this);
-            const formDataObj = Object.fromEntries(formData.entries());
-            
-            // Simulación de envío (en producción, esto sería una llamada fetch/ajax a tu servidor)
-            setTimeout(() => {
-                console.log('Form submitted:', formDataObj);
-                
-                // Mostrar mensaje de éxito
-                const successMessage = document.createElement('div');
-                successMessage.className = 'success-message';
-                successMessage.innerHTML = `
-                    <i class="fas fa-check-circle"></i>
-                    <h3>¡Mensaje enviado con éxito!</h3>
-                    <p>Gracias por contactarme. Te responderé lo antes posible.</p>
-                `;
-                
-                // Reemplazar el formulario con el mensaje
-                contactForm.innerHTML = '';
-                contactForm.appendChild(successMessage);
-                
-                // Animar scroll hasta el mensaje
-                successMessage.scrollIntoView({ behavior: 'smooth' });
-                
-                // Añadir botón para reiniciar el formulario (opcional)
-                const resetBtn = document.createElement('button');
-                resetBtn.className = 'btn';
-                resetBtn.textContent = 'Enviar otro mensaje';
-                successMessage.appendChild(resetBtn);
-                
-                resetBtn.addEventListener('click', function() {
-                    location.reload(); // Simple pero efectivo
-                });
-            }, 2000); // Simulación de 2 segundos
         });
     }
-    
-    // Añadir estilos CSS para errores y éxito
-    const style = document.createElement('style');
-    style.textContent = `
-        .input-error {
-            border-color: #e74c3c !important;
-            background-color: rgba(231, 76, 60, 0.1) !important;
-        }
-        
-        .error-message {
-            color: #e74c3c;
-            font-size: 0.8rem;
-            margin-top: 0.3rem;
-            transition: all 0.3s ease;
-        }
-        
-        .success-message {
-            padding: 3rem 2rem;
-            text-align: center;
-            color: #2ecc71;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .success-message i {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-        
-        .success-message h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: #2ecc71;
-        }
-        
-        .success-message p {
-            margin-bottom: 1.5rem;
-            color: var(--text-color);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    `;
-    document.head.appendChild(style);
-});
+}
 
-// Funcionalidad para el carrusel de testimonios
-document.addEventListener('DOMContentLoaded', function() {
-    const testimonialSlides = document.querySelectorAll('.testimonial-slide');
-    const dots = document.querySelectorAll('.testimonial-dot');
-    const prevBtn = document.querySelector('.testimonial-prev');
-    const nextBtn = document.querySelector('.testimonial-next');
-    let currentIndex = 0;
-
-    // Función para mostrar un testimonio específico
-    function showTestimonial(index) {
-        // Ocultar todos los testimonios
-        testimonialSlides.forEach(slide => {
-            slide.classList.remove('active');
+// Inicializa los modales
+function initModals() {
+    // Modal de proyectos
+    const projectModal = document.getElementById('project-modal');
+    
+    // Modal del dossier
+    const dossierBtn = document.getElementById('view-dossier');
+    const dossierModal = document.getElementById('dossier-modal');
+    
+    // Botones para cerrar los modales
+    const closeModalBtns = document.querySelectorAll('.close-modal');
+    
+    // Abrir modal del dossier
+    if (dossierBtn && dossierModal) {
+        dossierBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            dossierModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
-        
-        // Desactivar todos los dots
-        dots.forEach(dot => {
-            dot.classList.remove('active');
-        });
-        
-        // Mostrar el testimonio seleccionado
-        testimonialSlides[index].classList.add('active');
-        dots[index].classList.add('active');
-        currentIndex = index;
     }
     
-    // Event listeners para los botones de navegación
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            let newIndex = currentIndex - 1;
-            if (newIndex < 0) {
-                newIndex = testimonialSlides.length - 1;
+    // Cerrar modales con los botones de cierre
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const modal = btn.closest('.modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
             }
-            showTestimonial(newIndex);
-        });
-    }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            let newIndex = currentIndex + 1;
-            if (newIndex >= testimonialSlides.length) {
-                newIndex = 0;
-            }
-            showTestimonial(newIndex);
-        });
-    }
-    
-    // Event listeners para los dots
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            showTestimonial(index);
         });
     });
     
-    // Autoplay (opcional)
-    let autoplayInterval;
-    
-    function startAutoplay() {
-        autoplayInterval = setInterval(() => {
-            let newIndex = currentIndex + 1;
-            if (newIndex >= testimonialSlides.length) {
-                newIndex = 0;
+    // Cerrar modales al hacer clic fuera del contenido
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
             }
-            showTestimonial(newIndex);
-        }, 5000); // Cambiar cada 5 segundos
-    }
+        });
+    });
     
-    function stopAutoplay() {
-        clearInterval(autoplayInterval);
-    }
-    
-    // Iniciar autoplay
-    startAutoplay();
-    
-    // Detener autoplay al interactuar con el carrusel
-    document.querySelector('.testimonials-container').addEventListener('mouseenter', stopAutoplay);
-    document.querySelector('.testimonials-container').addEventListener('mouseleave', startAutoplay);
-});
+    // Cerrar modales con la tecla ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.active').forEach(modal => {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+}
