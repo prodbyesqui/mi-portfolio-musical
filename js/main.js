@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initContactForm();
     initModals();
     initTestimonialsSlider();
+    initParticles();
 });
 
 // Función para manejar el loader
@@ -133,9 +134,10 @@ async function loadServices() {
                     <p>${service.description}</p>
                 </div>
             `).join('');
+            showNotification('Servicios cargados correctamente', 'success');
         }
     } catch (error) {
-        console.error('Error al cargar los servicios:', error);
+        showNotification('Error al cargar los servicios', 'error');
     }
 }
 
@@ -159,17 +161,17 @@ async function loadBeats() {
                     </div>
                 </div>
             `).join('');
+            showNotification('Beats cargados correctamente', 'success');
         }
     } catch (error) {
-        console.error('Error al cargar los beats:', error);
+        showNotification('Error al cargar los beats', 'error');
     }
 }
 
 // Carga los proyectos desde el JSON
 async function loadProjects() {
     try {
-        // Corregido el nombre del archivo
-        const response = await fetch('data/projectsjson');
+        const response = await fetch('data/projects.json'); // Ruta corregida
         const projects = await response.json();
         const projectsContainer = document.getElementById('projects-container');
         
@@ -272,6 +274,58 @@ async function loadTestimonials() {
     }
 }
 
+// Función para mostrar notificaciones
+function showNotification(message, type) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: type === 'success' ? "#4caf50" : "#f44336"
+    }).showToast();
+}
+
+// Inicializa el formulario de contacto
+function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                // Mostrar notificación de envío
+                showNotification('Enviando mensaje...', 'info');
+                
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+                
+                // Configurar los parámetros según tu plantilla de EmailJS
+                const templateParams = {
+                    from_name: name,
+                    to_name: 'Esqui',
+                    reply_to: email,
+                    subject: subject,
+                    message: email + '\n\n' + message
+                };
+                
+                await emailjs.send(
+                    'service_iruml8s', 
+                    'template_vjaheue', 
+                    templateParams
+                );
+                
+                showNotification('¡Mensaje enviado con éxito!', 'success');
+                form.reset();
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+                showNotification('Error al enviar el mensaje', 'error');
+            }
+        });
+    }
+}
+
 // Inicializa el slider de testimonios
 function initTestimonialsSlider() {
     setTimeout(() => {
@@ -288,30 +342,19 @@ function initTestimonialsSlider() {
         let currentIndex = 0;
         let autoplayInterval;
 
-        // Función para mostrar un testimonio específico
         function showTestimonial(index) {
-            testimonialSlides.forEach(slide => {
-                slide.classList.remove('active');
-            });
-            
-            dots.forEach(dot => {
-                dot.classList.remove('active');
-            });
+            testimonialSlides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
             
             testimonialSlides[index].classList.add('active');
-            if (dots[index]) {
-                dots[index].classList.add('active');
-            }
+            if (dots[index]) dots[index].classList.add('active');
             currentIndex = index;
         }
         
-        // Event listeners para los botones de navegación
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
                 let newIndex = currentIndex - 1;
-                if (newIndex < 0) {
-                    newIndex = testimonialSlides.length - 1;
-                }
+                if (newIndex < 0) newIndex = testimonialSlides.length - 1;
                 showTestimonial(newIndex);
                 resetAutoplay();
             });
@@ -320,15 +363,12 @@ function initTestimonialsSlider() {
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
                 let newIndex = currentIndex + 1;
-                if (newIndex >= testimonialSlides.length) {
-                    newIndex = 0;
-                }
+                if (newIndex >= testimonialSlides.length) newIndex = 0;
                 showTestimonial(newIndex);
                 resetAutoplay();
             });
         }
         
-        // Event listeners para los dots
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => {
                 showTestimonial(index);
@@ -336,78 +376,169 @@ function initTestimonialsSlider() {
             });
         });
 
-        // Autoplay del slider
         function startAutoplay() {
             autoplayInterval = setInterval(() => {
                 let newIndex = currentIndex + 1;
-                if (newIndex >= testimonialSlides.length) {
-                    newIndex = 0;
-                }
+                if (newIndex >= testimonialSlides.length) newIndex = 0;
                 showTestimonial(newIndex);
-            }, 5000); // Cambia cada 5 segundos
+            }, 5000);
         }
 
-        // Resetea el autoplay
         function resetAutoplay() {
             clearInterval(autoplayInterval);
             startAutoplay();
         }
 
-        // Inicia el autoplay
         if (testimonialSlides.length > 1) {
             startAutoplay();
         }
-    }, 500); // Pequeño retraso para asegurar que los testimonios ya se han cargado
+    }, 500);
 }
 
-// Inicializa el formulario de contacto
+// Actualizar las funciones de carga
+async function loadServices() {
+    try {
+        const response = await fetch('data/services.json');
+        const services = await response.json();
+        const servicesContainer = document.getElementById('services-container');
+        
+        if (servicesContainer) {
+            servicesContainer.innerHTML = services.map(service => `
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="${service.icon}"></i>
+                    </div>
+                    <h3>${service.title}</h3>
+                    <p>${service.description}</p>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error al cargar los servicios:', error);
+    }
+}
+
+async function loadBeats() {
+    try {
+        const response = await fetch('data/beats.json');
+        const beats = await response.json();
+        const beatsContainer = document.getElementById('beats-container');
+        
+        if (beatsContainer) {
+            beatsContainer.innerHTML = beats.map(beat => `
+                <div class="beat-card">
+                    <div class="beat-video">
+                        <iframe src="${beat.embedUrl}" title="${beat.title}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="beat-info">
+                        <h3>${beat.title}</h3>
+                        <p>${beat.genre}</p>
+                        <a href="${beat.fullUrl}" class="btn project-btn" target="_blank" rel="noopener noreferrer">Ir al Beat</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error al cargar los beats:', error);
+    }
+}
+
+async function loadProjects() {
+    try {
+        const response = await fetch('data/projects.json');
+        const projects = await response.json();
+        const projectsContainer = document.getElementById('projects-container');
+        
+        if (projectsContainer) {
+            projectsContainer.innerHTML = projects.map(project => `
+                <div class="project-card" data-id="${project.id}">
+                    <img src="${project.image}" alt="${project.title} - ${project.artist}" class="project-img">
+                    <div class="project-overlay">
+                        <h3>${project.title}</h3>
+                        <p>${project.artist}</p>
+                        <a href="#" class="btn project-btn">Ver detalles</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        showNotification('Error al cargar los proyectos', 'error');
+    }
+}
+
+async function loadTestimonials() {
+    try {
+        const response = await fetch('data/testimonial.json');
+        const testimonials = await response.json();
+        const testimonialSlider = document.getElementById('testimonial-slider');
+        const testimonialDots = document.getElementById('testimonial-dots');
+        
+        if (testimonialSlider && testimonialDots) {
+            // Crear slides
+            testimonialSlider.innerHTML = testimonials.map((testimonial, index) => `
+                <div class="testimonial-slide ${index === 0 ? 'active' : ''}">
+                    <div class="testimonial-content">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p class="testimonial-text">${testimonial.text}</p>
+                        <div class="testimonial-author">
+                            <img src="${testimonial.image}" alt="${testimonial.author}" class="author-img">
+                            <div class="author-info">
+                                <h4>${testimonial.author}</h4>
+                                <p>${testimonial.role}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Crear dots
+            testimonialDots.innerHTML = testimonials.map((_, index) => `
+                <span class="testimonial-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></span>
+            `).join('');
+        }
+    } catch (error) {
+        showNotification('Error al cargar los testimonios', 'error');
+    }
+}
+
+// Actualizar el formulario de contacto
 function initContactForm() {
-    const contactForm = document.getElementById('contact-form');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const formData = new FormData(contactForm);
-            const formObject = Object.fromEntries(formData.entries());
-            
-            // Validación básica del formulario
-            const { name, email, subject, message } = formObject;
-            if (!name || !email || !subject || !message) {
-                alert('Por favor, completa todos los campos del formulario.');
-                return;
-            }
-            
-            // Validación simple de email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Por favor, introduce un email válido.');
-                return;
-            }
-            
             try {
-                // Aquí normalmente enviarías los datos a un servidor
-                // Por ahora, solo simularemos una respuesta exitosa
-                console.log('Datos del formulario:', formObject);
+                // Mostrar notificación de envío
+                showNotification('Enviando mensaje...', 'info');
                 
-                // Simular envío exitoso
-                alert('¡Mensaje enviado con éxito! Te contactaré pronto.');
-                contactForm.reset();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
                 
-                // En un caso real, aquí harías una petición fetch a tu endpoint
-                // const response = await fetch('tu-endpoint', {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //     },
-                //     body: JSON.stringify(formObject),
-                // });
-                // const data = await response.json();
-                // ... manejo de la respuesta
+                // Configurar los parámetros según tu plantilla de EmailJS
+                const templateParams = {
+                    from_name: name,
+                    to_name: 'Esqui',
+                    reply_to: email,
+                    subject: subject,
+                    message: email + '\n\n' + message
+                };
                 
+                await emailjs.send(
+                    'service_iruml8s', 
+                    'template_vjaheue', 
+                    templateParams
+                );
+                
+                showNotification('¡Mensaje enviado con éxito!', 'success');
+                form.reset();
             } catch (error) {
-                console.error('Error al enviar el formulario:', error);
-                alert('Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.');
+                console.error('Error al enviar el mensaje:', error);
+                showNotification('Error al enviar el mensaje', 'error');
             }
         });
     }
@@ -465,3 +596,190 @@ function initModals() {
         }
     });
 }
+
+function initDossierSlider() {
+    const slides = document.querySelectorAll('.dossier-slide');
+    const prevBtn = document.querySelector('.prev-slide');
+    const nextBtn = document.querySelector('.next-slide');
+    const dotsContainer = document.querySelector('.slide-dots');
+    let currentSlide = 0;
+
+    // Crear dots
+    slides.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('slide-dot');
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.slide-dot');
+
+    function goToSlide(index) {
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+        currentSlide = index;
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+    }
+
+    prevBtn.addEventListener('click', () => {
+        let newIndex = currentSlide - 1;
+        if (newIndex < 0) newIndex = slides.length - 1;
+        goToSlide(newIndex);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        let newIndex = currentSlide + 1;
+        if (newIndex >= slides.length) newIndex = 0;
+        goToSlide(newIndex);
+    });
+}
+
+// Llamar a la función cuando se abra el modal del dossier
+document.getElementById('view-dossier').addEventListener('click', () => {
+    document.getElementById('dossier-modal').classList.add('active');
+    initDossierSlider();
+});
+
+function initSectionAnimations() {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+}
+
+// Añadir a las inicializaciones
+document.addEventListener('DOMContentLoaded', () => {
+    initLoader();
+    updateCopyrightYear();
+    initMobileMenu();
+    initScrollEffects();
+    initScrollSpy();
+    loadServices();
+    loadBeats();
+    loadProjects();
+    loadTestimonials();
+    initContactForm();
+    initModals();
+    initTestimonialsSlider();
+    initSectionAnimations();
+});
+
+// Función para inicializar las partículas
+function initParticles() {
+    const container = document.getElementById('particles-container');
+    
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Posición inicial aleatoria en el eje X
+        const x = Math.random() * window.innerWidth;
+        particle.style.left = `${x}px`;
+        particle.style.top = '-10px';
+        
+        // Tamaño aleatorio más pequeño para efecto más suave
+        const size = Math.random() * 3 + 1;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Duración de caída más lenta (entre 8 y 12 segundos)
+        const duration = Math.random() * 4 + 8;
+        particle.style.animation = `fall ${duration}s linear forwards`;
+        
+        container.appendChild(particle);
+        
+        particle.addEventListener('animationend', () => {
+            particle.remove();
+        });
+    }
+    
+    // Crear partículas con menos frecuencia (cada 200ms)
+    setInterval(createParticle, 200);
+}
+
+
+function initMusicWaves() {
+    const container = document.createElement('div');
+    container.id = 'music-waves';
+    document.body.appendChild(container);
+
+    for (let i = 0; i < 5; i++) {
+        const wave = document.createElement('div');
+        wave.className = 'music-wave';
+        container.appendChild(wave);
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    initMusicWaves();
+    initDossierSlider();
+});
+
+
+function initMusicPlayer() {
+    const audio = document.getElementById('bgMusic');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const volumeControl = document.getElementById('volumeControl');
+    const muteBtn = document.getElementById('muteBtn');
+
+    // Inicializar volumen al 25%
+    audio.volume = 0.2;
+    volumeControl.value = 20;
+
+    // Reproducir automáticamente
+    audio.play().catch(error => {
+        console.log('Reproducción automática bloqueada por el navegador');
+    });
+
+    // Toggle para expandir/colapsar
+    musicPlayer.addEventListener('click', (e) => {
+        if (e.target.closest('.music-controls')) return;
+        musicPlayer.classList.toggle('collapsed');
+    });
+
+    playPauseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (audio.paused) {
+            audio.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+            audio.pause();
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+    });
+
+    volumeControl.addEventListener('input', (e) => {
+        e.stopPropagation();
+        const volume = e.target.value / 100;
+        audio.volume = volume;
+        updateVolumeIcon(volume);
+    });
+
+    muteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        audio.muted = !audio.muted;
+        updateVolumeIcon(audio.muted ? 0 : audio.volume);
+    });
+
+    function updateVolumeIcon(volume) {
+        const icon = muteBtn.querySelector('i');
+        icon.className = volume === 0 ? 'fas fa-volume-mute' :
+                        volume < 0.5 ? 'fas fa-volume-down' :
+                        'fas fa-volume-up';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initMusicPlayer();
+});

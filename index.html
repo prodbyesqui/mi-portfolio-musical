@@ -9,8 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <meta name="description" content="Productor Musical Urbano especializado en Trap, R&B y Reggaetón. Creación de beats, producción y mezcla profesional en Madrid.">
+    <meta name="keywords" content="productor musical, beats, trap, R&B, reggaetón, producción musical, Madrid, Esqui">
+    <meta property="og:title" content="Esqui | Productor Musical">
+    <meta property="og:description" content="Productor Musical Urbano | Beats profesionales de Trap, R&B y Reggaetón">
+    <meta property="og:image" content="assets/images/3.jpg">
 </head>
 <body>
+    <div id="particles-container"></div>
     <!-- Loader -->
     <div class="loader">
         <div class="waveform">
@@ -37,7 +45,9 @@
                 <li><a href="#services" class="nav-link">Servicios</a></li>
                 <li><a href="#beats" class="nav-link">Beats</a></li>
                 <li><a href="#projects" class="nav-link">Proyectos</a></li>
+                <li><a href="#testimonials" class="nav-link">Testimonios</a></li>
                 <li><a href="#dossier" class="nav-link">Dossier</a></li>
+                <li><a href="#contact" class="nav-link">Contacto</a></li>
             </ul>
         </nav>
     </header>
@@ -50,11 +60,15 @@
                 <source src="assets/videos/background.mp4" type="video/mp4">
             </video>
             <div class="fallback-bg"></div> <!-- Fondo alternativo si el video no carga -->
+            <img src="assets/images/studio-bg.jpg" alt="Estudio de música" class="hero-bg-image" loading="lazy" />
         </div>
         <div class="hero-content animate__animated animate__fadeInUp">
             <h1>ESQUI</h1>
             <p>Productor Musical Urbano | Trap | R&B | Reggaetón</p>
-            <a href="#about" class="btn">Explora mi mundo</a>
+            <div class="cta-buttons">
+                <a href="#beats" class="btn primary-btn">Escuchar Beats</a>
+                <a href="#contact" class="btn secondary-btn">Trabajemos Juntos</a>
+            </div>
         </div>
     </section>
 
@@ -84,7 +98,6 @@
         </div>
         <div class="services-container" id="services-container">
             <!-- Los servicios se cargarán desde services.json -->
-            <div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Cargando servicios...</div>
         </div>
     </section>
 
@@ -95,7 +108,6 @@
         </div>
         <div class="beats-container" id="beats-container">
             <!-- Los beats se cargarán desde beats.json -->
-            <div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Cargando beats...</div>
         </div>
     </section>
 
@@ -106,7 +118,6 @@
         </div>
         <div class="projects-container" id="projects-container">
             <!-- Los proyectos se cargarán desde projects.json -->
-            <div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Cargando proyectos...</div>
         </div>
     </section>
 
@@ -118,7 +129,6 @@
         <div class="testimonials-container">
             <div class="testimonial-slider" id="testimonial-slider">
                 <!-- Los testimonios se cargarán desde testimonial.json -->
-                <div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Cargando testimonios...</div>
             </div>
             <div class="testimonial-nav">
                 <button class="testimonial-prev" aria-label="Testimonio anterior"><i class="fas fa-chevron-left"></i></button>
@@ -152,7 +162,7 @@
                 <div class="contact-methods">
                     <div class="contact-method">
                         <i class="fas fa-envelope"></i>
-                        <a href="mailto:prodbyesqui@gmail.com">prodbyesqui@gmail.com</a>
+                        <a href="mailto:prodbyesqui@gmail.com" style="color: white;">prodbyesqui@gmail.com</a>
                     </div>
                     <div class="contact-method">
                         <i class="fas fa-map-marker-alt"></i>
@@ -160,7 +170,7 @@
                     </div>
                     <div class="contact-method">
                         <i class="fab fa-instagram"></i>
-                        <a href="https://www.instagram.com/hugoeg_04" target="_blank" rel="noopener noreferrer">@hugoeg_04</a>
+                        <a href="https://www.instagram.com/hugoeg_04" style="color: white;" target="_blank" rel="noopener noreferrer">@hugoeg_04</a>
                     </div>
                 </div>
             </div>
@@ -214,11 +224,106 @@
     <div class="modal" id="dossier-modal" aria-hidden="true" tabindex="-1" role="dialog">
         <div class="modal-content" role="document">
             <button class="close-modal" aria-label="Cerrar"><i class="fas fa-times"></i></button>
-            <h2>Mi Dossier</h2>
-            <iframe src="assets/docs/dossier.pdf" class="pdf-viewer" title="Dossier PDF"></iframe>
+            <div class="dossier-slider">
+                <!-- Slide 1: Introducción -->
+                <div class="dossier-slide active">
+                    <div class="slide-content">
+                        <h2>Bienvenido a mi Mundo Musical</h2>
+                        <div class="profile-image">
+                            <img src="assets/images/3.jpg" alt="Esqui - Productor Musical">
+                        </div>
+                        <p class="tagline">Productor Musical Urbano | Trap | R&B | Reggaetón</p>
+                    </div>
+                </div>
+                
+                <!-- Slide 2: Experiencia -->
+                <div class="dossier-slide">
+                    <div class="slide-content">
+                        <h2>Experiencia</h2>
+                        <div class="experience-grid">
+                            <div class="experience-item">
+                                <i class="fas fa-music"></i>
+                                <h3>Producción Musical</h3>
+                                <p>Especializado en la creación de beats y producción completa</p>
+                            </div>
+                            <div class="experience-item">
+                                <i class="fas fa-sliders-h"></i>
+                                <h3>Mezcla y Masterización</h3>
+                                <p>Proceso profesional para un sonido comercial</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3: Proyectos Destacados -->
+                <div class="dossier-slide">
+                    <div class="slide-content">
+                        <h2>Proyectos Destacados</h2>
+                        <div class="projects-showcase">
+                            <!-- Los proyectos se cargarán dinámicamente desde projects.json -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 4: Equipamiento -->
+                <div class="dossier-slide">
+                    <div class="slide-content">
+                        <h2>Mi Equipamiento</h2>
+                        <div class="equipment-list">
+                            <div class="equipment-item">
+                                <i class="fas fa-laptop"></i>
+                                <h3>Software</h3>
+                                <p>FL Studio</p>
+                            </div>
+                            <div class="equipment-item">
+                                <i class="fas fa-headphones"></i>
+                                <h3>Monitores</h3>
+                                <p>Monitores de estudio profesionales</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Controles del slider -->
+            <div class="dossier-controls">
+                <button class="prev-slide"><i class="fas fa-chevron-left"></i></button>
+                <div class="slide-dots"></div>
+                <button class="next-slide"><i class="fas fa-chevron-right"></i></button>
+            </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("TmT4SLcgB5CrhS4Mz");
+        })();
+    </script>
     <script src="js/main.js"></script>
 </body>
 </html>
+
+    <!-- Music Player (añadir antes del cierre del body) -->
+    <div class="music-player collapsed" id="musicPlayer">
+        <div class="music-player-toggle">
+            <i class="fas fa-music"></i>
+        </div>
+        <div class="music-player-content">
+            <div class="music-controls">
+                <button class="music-control-btn" id="playPauseBtn">
+                    <i class="fas fa-pause"></i>
+                </button>
+                <input type="range" class="volume-control" id="volumeControl" min="0" max="100" value="25">
+                <button class="music-control-btn" id="muteBtn">
+                    <i class="fas fa-volume-down"></i>
+                </button>
+            </div>
+        </div>
+        <audio id="bgMusic" loop>
+            <source src="assets/music/lofi-background.mp3" type="audio/mp3">
+        </audio>
+    </div>
+</body>
+</html>
+
